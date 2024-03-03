@@ -25,3 +25,9 @@ CREATE TABLE student_grades (
     grade DECIMAL(5, 2),
     FOREIGN KEY (student_id) REFERENCES students(id)
 );
+
+
+INSERT INTO type_identification (name) VALUES
+    ('CC'),
+    ('IT'),
+    ('NIT');
