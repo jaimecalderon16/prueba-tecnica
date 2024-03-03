@@ -1,0 +1,185 @@
+
+<p-toast></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<p-dialog header="Crear Nuevo Estudiante" [(visible)]="modalVisible" [modal]="true" [style]="{ width: '50vw', overflow: 'visible' }"  [resizable]="true">
+  <ng-template pTemplate="headless">
+    <div style="background-color: white; padding: 2rem;">
+      <h3>{{isEdit? 'Editar' : 'Crear'}} Estudiante</h3>
+  <form  [formGroup]="estudentForm" (ngSubmit)="storeStudent()">
+    <div class="container-Form">
+
+        <span class="p-float-label">
+          <input pInputText formControlName="code" id="code" type="text" />
+          <label for="code">Codigo</label>
+        </span>
+
+        <span class="p-float-label mt-13">
+          <input pInputText formControlName="firtsName" id="firtsName" type="text" />
+          <label for="firtsName">Nombre</label>
+        </span>
+
+        <span class="p-float-label mt-13">
+          <input pInputText formControlName="lastName" id="lastName" type="text" />
+          <label for="lastName">Apellido</label>
+        </span>
+
+        <p-dropdown formControlName="typeIdentification" [style]="{width: '15rem'}" optionValue="id" [options]="typesIdentifications" optionLabel="name" placeholder="Tipo de identificacion"></p-dropdown>
+
+        <span class="p-float-label">
+          <input pInputText formControlName="identificacion" id="identificacion" type="text" />
+          <label for="identificacion">Identificacion</label>
+        </span>
+
+        <span class="p-float-label">
+          <input pInputText formControlName="phone" id="phone" type="text" />
+          <label for="phone">Telefono</label>
+        </span>
+
+        <span class="p-float-label">
+          <input pInputText formControlName="address" id="address" type="text" />
+          <label for="address">Dirección</label>
+        </span>
+
+        <span class="p-float-label">
+            <p-calendar formControlName="birthDate" inputId="birthDate"></p-calendar>
+            <label for="birthDate">Fecha De Nacimiento</label>
+        </span>
+
+        <span class="p-float-label">
+            <p-calendar formControlName="dateAdmission" inputId="dateAdmission"></p-calendar>
+            <label for="dateAdmission">Fecha De Admisión</label>
+        </span>
+
+        <div style="width: 100%;">
+          <p-button label="Agrgar Nota" (onClick)="addGred()" severity="info"></p-button>
+        </div>
+
+        @for (gred of grades; track $index) {
+          <div style="width: 100%; display: flex; justify-content: end;">
+            <span class="p-float-label">
+              <input pInputText :id="`materia${$index}`" [(ngModel)]="gred.courseName" [ngModelOptions]="{standalone: true}"/>
+              <label :for="`materia${$index}`">Materia</label>
+            </span>
+            <div style="width: 10%;"></div>
+            <span class="p-float-label">
+              <input pInputText :id="`nota${$index}`" [(ngModel)]="gred.grade" [ngModelOptions]="{standalone: true}" type="number"/>
+              <label :for="`nota${$index}`">Nota</label>
+            </span>
+          </div>
+        }
+
+      </div>
+
+      <div class="conatinerFormButtoms" style="margin-top: 2rem;">
+        <p-button label="Cancelar" (onClick)="closeDialog()" severity="danger"></p-button>
+        <button pButton pRipple label="Guardar" type="submit"  class="p-button-success"></button>
+      </div>
+
+      @if (estudentForm.get('email')?.errors && estudentForm.get('email')?.dirty ) {
+        <span style="color: red;">Hay un error</span>
+      }
+
+    </form>
+  </div>
+  </ng-template>
+</p-dialog>
+
+<Section>
+  <h1 class="title">Gestor de estudiantes - Jaime Calderon</h1>
+
+  <div class="headerTable">
+    <p-card header="Filtros">
+      <div class="container-filter">
+        <span class="p-float-label">
+          <input pInputText id="code" [(ngModel)]="code" />
+          <label for="code">Codigo</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText id="code" [(ngModel)]="identification" />
+          <label for="code">Identificacion</label>
+        </span>
+        <span class="p-float-label">
+          <input pInputText id="username" [(ngModel)]="name" />
+          <label for="username">Nombre</label>
+        </span>
+
+        <span class="p-float-label">
+          <p-calendar [(ngModel)]="startDate" inputId="birth_date"></p-calendar>
+          <label for="birth_date">Fecha Desde</label>
+      </span>
+
+        <span class="p-float-label">
+          <p-calendar [(ngModel)]="endDate" inputId="birth_date"></p-calendar>
+          <label for="birth_date">Fecha hasta</label>
+      </span>
+
+        <p-button label="Filtrar" (onClick)="filterStudent()" severity="secundary"></p-button>
+      </div>
+  </p-card>
+</div>
+
+<div class="crear-studiante">
+  <p-button (click)="showDialog()"  label="Crear Estudiante" severity="success"></p-button>
+</div>
+
+<div class="card">
+  <p-table
+  [value]="students" [tableStyle]="{'min-width': '50rem'}"
+  currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  [paginator]="true"
+  [rows]="5"
+  >
+      <ng-template pTemplate="header">
+          <tr>
+              <th pSortableColumn="id" style="width:20%">Codigo <p-sortIcon field="id"></p-sortIcon></th>
+              <th pSortableColumn="firstName" style="width:20%">Nombre <p-sortIcon field="firstName"></p-sortIcon></th>
+              <th pSortableColumn="lastName" style="width:20%">Apellido <p-sortIcon field="lastName"></p-sortIcon></th>
+              <th pSortableColumn="identification" style="width:20%">Identificacion <p-sortIcon field="identification"></p-sortIcon></th>
+              <th pSortableColumn="phone" style="width:20%">Telefono <p-sortIcon field="phone"></p-sortIcon></th>
+              <th pSortableColumn="dateOfBirth" style="width:20%">Fecha de nacimiento <p-sortIcon field="dateOfBirth"></p-sortIcon></th>
+              <th  style="width:20%">Acciones</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-student>
+          <tr>
+              <td>{{student.code}}</td>
+              <td>{{student.firstName}}</td>
+              <td>{{student.lastName}}</td>
+              <td>{{student.identification}}</td>
+              <td>{{student.phone}}</td>
+              <td>{{student.dateOfBirth}}</td>
+              <td>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <p-button label="Editar" (onClick)="fillform(student)" severity="warning"  [rounded]="true" [size]="'small'" [style]="{margin: '0 3px'}"></p-button>
+                  <p-button (click)="confirm2($event, student.id)" label="Eliminar" severity="danger" [rounded]="true" [size]="'small'" [style]="{margin: '0 3px'}"></p-button>
+                </div>
+              </td>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="8">
+            <div style="display: flex; justify-content: center; width: 100%;">
+              @if (!isloadingtable) {
+                <Span>No Hay Registros</Span>
+              } @else {
+                <p-progressSpinner ariaLabel="loading"></p-progressSpinner>
+              }
+            </div>
+          </td>
+        </tr>
+    </ng-template>
+
+      <ng-template pTemplate="paginatorleft">
+        <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+    </ng-template>
+    <ng-template pTemplate="paginatorright">
+        <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+    </ng-template>
+  </p-table>
+</div>
+
+</Section>
+

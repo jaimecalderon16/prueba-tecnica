@@ -1,0 +1,15 @@
+<form action="">
+  <p-card header="Login" [style]="{ width: '360px', margin: 'auto auto' }" class="card">
+  <div class="field">
+    <label for="asd">Contarseña</label>
+    <input type="email" pInputText formControlName="asd"  name="asd" class="w-full"/>
+    @if (LoginForm.controls.email.invalid && LoginForm.controls.email.dirty || LoginForm.controls.email.touched) {
+      <small></small>
+    }
+  </div>
+  <div class="field">
+    <label for="password">Contarseña</label>
+    <input type="text" pInputText formControlName="password"  name="password" class="w-full mt-5"/>
+  </div>
+</p-card>
+</form>

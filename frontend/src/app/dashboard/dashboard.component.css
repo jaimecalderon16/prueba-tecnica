@@ -1,0 +1,54 @@
+Section{
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 4rem;
+}
+
+.container-filter{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.headerTable{
+  height: 20vh;
+  justify-content: space-around;
+}
+
+.crear-studiante{
+  display: flex;
+  width: 100%;
+  justify-content: end;
+  padding: 1rem 0;
+}
+
+.p-dialog .p-dialog-content{
+  overflow: visible !important;
+}
+
+form{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+}
+
+.container-Form{
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.container-Form > * {
+margin-top: 1rem;
+}
+
+.conatinerFormButtoms > *{
+  margin-left: 1rem;
+}
+
+.conatinerFormButtoms{
+  display: flex;
+  width: 100%;
+  justify-content: end;
+}
